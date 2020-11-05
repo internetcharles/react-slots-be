@@ -2,6 +2,7 @@ const fs = require('fs');
 const pool = require('../lib/utils/pool');
 const request = require('supertest');
 const app = require('../lib/app');
+const User = require('../lib/models/user');
 
 describe('slot-machine-react routes', () => {
   beforeAll(() => {
@@ -32,5 +33,21 @@ describe('slot-machine-react routes', () => {
           name: 'charlie',
           money: 100
         }));
+  });
+
+  it('updates a user by id via PUT', async() => {
+    const user = await User.findById(1);
+    const updatedUser = {
+      name: 'ron',
+      money: 1000
+    };
+    const response = await request(app)
+      .put(`/users/${user.id}`)
+      .send(updatedUser);
+
+    expect(response.body).toEqual({
+      ...updatedUser,
+      id: user.id
+    });
   });
 });
