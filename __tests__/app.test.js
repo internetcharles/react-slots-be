@@ -50,4 +50,12 @@ describe('slot-machine-react routes', () => {
       id: user.id
     });
   });
+
+  it('deletes a user by id via DELETE', async() => {
+    const user = await User.findById(1);
+    const response = await request(app)
+      .delete(`/users/${user.id}`);
+
+    expect(response.body).toEqual(user);
+  });
 });
